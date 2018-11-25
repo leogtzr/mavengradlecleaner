@@ -10,7 +10,7 @@ wait_for_jobs() {
     local -r pids="${1}"
     local p
     for p in ${pids}; do
-        if wait ${p}; then
+        if wait "${p}"; then
             echo -e "\e[32mDone\e[0m $(dirname "${pidinfo[${p}]}")"
         else
             echo -e "\e[31mFailed\e[0m ===>  $(dirname "${pidinfo[${p}]}")"
@@ -18,7 +18,7 @@ wait_for_jobs() {
     done
 }
 
-while read build_file; do
+while read -r build_file; do
     if grep --silent 'pom\.xml$' <<< "${build_file}"; then
         mvn --quiet --file "${build_file}" clean > /dev/null 2>&1 &
         last_pid=${!}
