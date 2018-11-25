@@ -11,9 +11,9 @@ wait_for_jobs() {
     local p
     for p in ${pids}; do
         if wait ${p}; then
-            echo "Done ==> ${pidinfo[${p}]}"
+            echo -e "\e[32mDone\e[0m $(dirname "${pidinfo[${p}]}")"
         else
-            echo "Failed ===>  ${pidinfo[${p}]}"
+            echo -e "\e[31mFailed\e[0m ===>  $(dirname "${pidinfo[${p}]}")"
         fi
     done
 }
@@ -37,7 +37,7 @@ while read build_file; do
         wait_for_jobs "${pids}"
         pids=""
     fi
-done < <(locate --ignore-case pom.xml build.gradle | grep --extended-regexp '(pom\.xml|build\.gradle)$')
+done < <(locate --ignore-case pom.xml build.gradle | grep --extended-regexp '(pom\.xml|build\.gradle)$' | sort)
 
 wait_for_jobs "${pids}"
 
